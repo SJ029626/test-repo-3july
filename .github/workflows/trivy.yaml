@@ -24,7 +24,7 @@ jobs:
       - name: Install Trivy
         uses: aquasecurity/trivy-action@master
         with:
-          version: '0.51.1'  # Optional: pin a specific version
+          version: latest  # Optional: pin a specific version
 
       - name: Run Trivy FS scan on the repository
         run: |
