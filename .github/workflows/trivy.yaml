@@ -1,4 +1,4 @@
-name: Trivy Scan
+name: Trivy Repo Scan
 
 on:
   push:
@@ -10,25 +10,32 @@ on:
 
 permissions:
   contents: read
-  security-events: write  # Required for uploading SARIF results to GitHub
+  security-events: write  # For uploading SARIF to GitHub Security tab
 
 jobs:
   trivy-scan:
-    name: Run Trivy vulnerability scanner
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Cache Trivy DB
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/trivy
+          key: trivy-db-${{ runner.os }}
+          restore-keys: |
+            trivy-db-
+
       - name: Install Trivy
         uses: aquasecurity/trivy-action@master
         with:
-          version: latest  # Optional: pin a specific version
-
-      - name: Run Trivy FS scan on the repository
-        run: |
-          trivy fs . --exit-code 1 --format sarif --output trivy-results.sarif
+          scan-type: fs
+          scan-ref: .
+          format: sarif
+          output: trivy-results.sarif
+          exit-code: 1
 
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v3
