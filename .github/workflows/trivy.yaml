@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - main
+      - vulnerable
   pull_request:
     branches:
       - main
+      - vulnerable
 
 permissions:
   contents: read
