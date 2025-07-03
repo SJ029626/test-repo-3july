@@ -6,3 +6,5 @@ def run_ping(host):
 # Example usage
 user_input = input("Enter a hostname to ping: ")
 run_ping(user_input)
+
+#test
